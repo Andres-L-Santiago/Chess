@@ -1,7 +1,7 @@
 from os import system, name
 from color import colors
 from cells import Cell
-
+import sympy
 
 def clear():
 
