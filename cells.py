@@ -34,7 +34,7 @@ class Cell:
             self.side = 1
 
         if self.piece_type == 'K' or self.piece_type == 'Q':
-          self.text = self.piece_type
+            self.text = self.piece_type
         elif self.piece_type:
             self.text = self.piece_type + str(self.num)
         else:

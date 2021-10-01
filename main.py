@@ -1,6 +1,15 @@
-from os import system as clear
+from os import system, name
 from color import colors
 from cells import Cell
+
+
+def clear():
+
+    if name == 'nt':
+        _ = system('cls')
+
+    else:
+        _ = system('clear')
 
 
 class game:
@@ -20,7 +29,7 @@ class game:
         if kwargs:
             moves = kwargs["moves"]
         # clears console
-        clear('clear')
+        clear()
         #prints title for chessboard
         print(colors.bg.black,
               '    ',
@@ -42,7 +51,7 @@ class game:
                 # calculates background color
                 if moves and (row, piece) in moves:
                     back_color = colors.bg.On_IGreen
-                elif moves and (row, piece, turn) in moves:
+                elif moves and (row, piece, 1) in moves:
                     back_color = colors.bg.red
                 elif row % 2 + piece % 2 == 1:
                     back_color = colors.bg.Dark_Ch
@@ -87,7 +96,8 @@ class game:
         piece_lose.side, piece_win.side = piece_win.side, None
         piece_lose.piece_type, piece_win.piece_type = piece_win.piece_type, None
         piece_lose.text, piece_win.text = piece_win.text, '  '
-        piece_lose.moved, piece_win.moved = piece_win.moved, None
+        if piece_win.piece_type == 'P':
+            piece_lose.moved, piece_win.moved = True, None
 
     # checks whether position is a valid move
     # ex. same side piece results in invalid move position
@@ -319,7 +329,6 @@ class game:
 
     # manages user input
     def input(board, turn):
-
         pos = 'back'
 
         while pos == 'back':
@@ -335,7 +344,9 @@ class game:
 
                 Piece = str(input('> '))
 
-                if Piece[0] == 'p' or 'r' or 'n' or 'b' or 'q' or 'k':
+                if not Piece:
+                    pass
+                elif Piece[0] == 'p' or 'r' or 'n' or 'b' or 'q' or 'k':
                     Piece = Piece.capitalize()
 
                 if not ((Piece in game.ROYAL_ROW) or (Piece in game.PAWN_ROW)):
@@ -347,27 +358,48 @@ class game:
                     if Piece == piece.text and turn == piece.side:
                         move_list = game.valid_move(board, piece)
                         piece_coord = (piece.x, piece.y)
-                        
+
             if move_list:
-              # rerenders board with move list
-              game.board_render(board, turn, moves=move_list)
+                # rerenders board with move list
+                game.board_render(board, turn, moves=move_list)
 
-              print('Enter where you want {} to move:'.format(Piece))
-              print('(if you\'d like to change your piece, type "back")')
+                print('Enter where you want {} to move:'.format(Piece))
+                print('(if you\'d like to change your piece, type "back")')
 
-              while (len(pos) != 2) or (int(pos[1]) not in range(
-                      1, 9)) or (pos[0] not in 'abcdefgh'):
+                while (len(pos) != 2) or (int(pos[1]) not in range(
+                        1, 9)) or (pos[0] not in 'abcdefgh') and pos:
 
-                  pos = input('> ')
+                    pos = input('> ')
 
-                  if (len(pos) == 2) and ((int(pos[1]) in range(
-                          1, 9))) and (pos[0] in 'abcdefgh'):
-                      pass
-                  elif pos != 'back':
-                      print('You have not entered a valid position. Try again.')
-                  elif pos == 'back':
-                      break
-            
+                    if pos != 'back' and pos[0] in [
+                            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'
+                    ]:
+                        pos_let = ['a', 'b', 'c', 'd', 'e', 'f', 'g',
+                                   'h'].index(pos[0])
+                        pos_num = int(pos[1])
+                    if (len(pos) == 2) and ((int(pos[1]) in range(
+                            1, 9))) and (pos[0] in 'abcdefgh'):
+                        pass
+                    elif pos != 'back':
+                        print(
+                            'You have not entered a valid position. Try again.'
+                        )
+                    elif pos == 'back':
+                        break
+                if pos != 'back':
+                    pos_let = ['a', 'b', 'c', 'd', 'e', 'f', 'g',
+                               'h'].index(pos[0])
+                    pos_num = int(pos[1])
+                    if (8 - pos_num, pos_let) not in move_list and (
+                            8 - pos_num, pos_let, 1) not in move_list:
+                        game.board_render(board, turn)
+                        print(
+                            'You have not entered a valid position. Try again.'
+                        )
+                        pos = 'back'
+            else:
+                game.board_render(board, turn)
+                print("Piece has no valid movements.")
 
         pos_let = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'].index(pos[0])
         pos_num = int(pos[1])
