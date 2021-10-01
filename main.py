@@ -1,7 +1,7 @@
 from os import system, name
 from color import colors
 from cells import Cell
-import sympy
+
 
 def clear():
 
@@ -32,14 +32,15 @@ class game:
         clear()
         #prints title for chessboard
         print(colors.bg.black,
-              '    ',
-              colors.bg.black,
-              "             Chess                ",
+              "                                 Chess                                  ",
               sep="")
+        print(colors.reset + colors.bg.black,
+              "      a       b       c       d       e       f       g       h        ")
         # iterates through rows
         for row in range(8):
             # initializes row string with number and white space
-            row_str = f' {8 - row}  '
+            row_str = '    '
+            row_str_text = f' {8 - row}  '
             # iterates through each piece in the row
             for piece in range(8):
                 if board[row][piece].side == 0 and board[row][
@@ -60,14 +61,20 @@ class game:
                 # prints queen or king pieces with extra space
                 if board[row][piece].piece_type == "Q" or board[row][
                         piece].piece_type == "K":
-                    row_str += f'{back_color} {text_color + board[row][piece].text}  {colors.reset + colors.bg.black}'
+                    row_str += f'{back_color}        {colors.reset + colors.bg.black}'
+                    row_str_text += f'{back_color}   {text_color + board[row][piece].text}    {colors.reset + colors.bg.black}'
                 # prints piece text
                 else:
-                    row_str += f'{back_color} {text_color + board[row][piece].text} {colors.reset + colors.bg.black}'
-            print(row_str + '  ')
+                    row_str += f'{back_color}        {colors.reset + colors.bg.black}'
+                    row_str_text += f'{back_color}   {text_color + board[row][piece].text}   {colors.reset + colors.bg.black}'
+            row_str += '    '
+            row_str_text += f'  {8 - row} '
+            print(row_str)
+            print(row_str_text)
+            print(row_str)
         # prints column labels at bottom of board
         print(colors.reset + colors.bg.black,
-              "    a   b   c   d   e   f   g   h    ")
+              "      a       b       c       d       e       f       g       h        ")
 
     def intro():
         # can you put the intro stuff in here
