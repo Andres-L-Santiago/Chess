@@ -3,9 +3,13 @@ from board import Board
 
 class Game:
 
+
     # constants for row pieces
     ROYAL_ROW = ("R1", "N1", "B1", "Q", "K", "B2", "N2", "R2")
     PAWN_ROW = ("P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8")
+
+    points = [0, 0]
+    game_moves = []
 
     @staticmethod
     def intro():
@@ -15,6 +19,7 @@ class Game:
         )
 
     # manages user input
+    @classmethod
     def input(self, board, turn):
         pos = 'back'
 
@@ -92,6 +97,7 @@ class Game:
         pos_num = int(pos[1])
         return piece_coord, (pos_let, 8 - pos_num)
 
+    @classmethod
     def engine(self):
         turn = 1
         chessboard = Board()
@@ -99,8 +105,9 @@ class Game:
         self.intro()
         while True:
             ((x1, y1), (x2, y2)) = self.input(chessboard, turn)
-            chessboard.piece_replace(x2, y2, x1, y1)
+            chessboard.piece_replace(x2, y2, x1, y1, self.points)
             chessboard.render(turn)
+            print(self.points)
             turn = -turn + 1
 
 

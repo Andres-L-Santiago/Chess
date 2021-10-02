@@ -11,21 +11,27 @@ class Cell:
                 self.num = 2
             if x == 0 or x == 7:
                 self.piece_type = 'R'
+                self.points = 5
             elif x == 1 or x == 6:
                 self.piece_type = 'N'
+                self.points = 3
             elif x == 2 or x == 5:
                 self.piece_type = 'B'
+                self.points = 3
             elif x == 3:
                 self.piece_type = 'Q'
+                self.points = 9
             elif x == 4:
                 self.piece_type = 'K'
         elif y == 1 or y == 6:
             self.num = x + 1
             self.piece_type = 'P'
+            self.points = 1
             self.moved = False
         else:
             self.side = None
             self.piece_type = None
+            self.points = 0
             self.num = None
 
         if y == 0 or y == 1:

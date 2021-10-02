@@ -95,11 +95,13 @@ class Board:
         piece1.piece_type, piece2.piece_type = piece2.piece_type, piece1.piece_type
         piece1.side, piece2.side = piece2.side, piece1.side
 
-    # replaces piece lose with piece win
-    def piece_replace(self, x1, y1, x2, y2):
-        print(x1, y1, x2, y2)
+    # replaces piece 1 with piece 2
+    def piece_replace(self, x1, y1, x2, y2, points):
+        points[self.board[y2][x2].side] += self.board[y1][x1].points
         self.board[y1][x1].num, self.board[y2][x2].num = self.board[y2][
             x2].num, None
+        self.board[y1][x1].points, self.board[y2][x2].points = self.board[y2][
+            x2].points, None
         self.board[y1][x1].side, self.board[y2][x2].side = self.board[y2][
             x2].side, None
         self.board[y1][x1].piece_type, self.board[y2][
@@ -138,10 +140,10 @@ class Board:
                 self.valid_piece_check(y_coord + 2 * direction, x_coord, piece.side,
                                        moves, attacks)
             # checks for diagonal attacks
-            if x_coord - 1 >= 0 and self.board[y_coord + direction][x_coord - 1].piece_type:
+            if x_coord - 1 >= 0 and self.board[y_coord + direction][x_coord - 1].piece_type and self.board[y_coord + direction][x_coord - 1].side != piece.side:
                 attacks.append((y_coord + direction, x_coord - 1))
-            if x_coord + 1 <= 7 and self.board[y_coord + direction][x_coord + 1].piece_type:
-                attacks.append((y_coord + direction, x_coord - 1))
+            if x_coord + 1 <= 7 and self.board[y_coord + direction][x_coord + 1].piece_type and self.board[y_coord + direction][x_coord + 1].side != piece.side:
+                attacks.append((y_coord + direction, x_coord + 1))
         # creates list for rook pieces
         elif piece.piece_type == "R":
 
