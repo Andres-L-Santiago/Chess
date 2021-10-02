@@ -1,4 +1,4 @@
-class colors:
+class Colors:
 
     # General Modifiers
 
