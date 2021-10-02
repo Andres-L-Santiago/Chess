@@ -39,4 +39,3 @@ class Cell:
             self.text = self.piece_type + str(self.num)
         else:
             self.text = '  '
-# please undo
