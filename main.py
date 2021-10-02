@@ -1,22 +1,21 @@
 from board import Board
 
 
-
 class Game:
 
     # constants for row pieces
     ROYAL_ROW = ("R1", "N1", "B1", "Q", "K", "B2", "N2", "R2")
     PAWN_ROW = ("P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8")
-    
+
+    @staticmethod
     def intro():
         # can you put the intro stuff in here
         print(
             '\nWelcome to chess. Both players will alternate making moves as prompted by the text. To make a move, enter the name of the piece to be moved (Ex: Knight 1 = N1) when prompted, and enter the position of the destination tile (Ex: a3) when prompted. Have fun!\n'
         )
 
-
     # manages user input
-    def input(board, turn):
+    def input(self, board, turn):
         pos = 'back'
 
         while pos == 'back':
@@ -27,8 +26,8 @@ class Game:
 
             Piece = None
 
-            while (Piece not in Game.ROYAL_ROW) and (Piece
-                                                     not in Game.PAWN_ROW):
+            while (Piece not in self.ROYAL_ROW) and (Piece
+                                                     not in self.PAWN_ROW):
 
                 Piece = str(input('> '))
 
@@ -37,7 +36,7 @@ class Game:
                 elif Piece[0] == 'p' or 'r' or 'n' or 'b' or 'q' or 'k':
                     Piece = Piece.capitalize()
 
-                if not ((Piece in Game.ROYAL_ROW) or (Piece in Game.PAWN_ROW)):
+                if not ((Piece in self.ROYAL_ROW) or (Piece in self.PAWN_ROW)):
                     print("You have not entered a valid piece. Try again.")
 
             # creates valid move list for selected piece
@@ -48,7 +47,7 @@ class Game:
                         piece_coord = (piece.x, piece.y)
 
             if move_list or attack_list:
-                # rerenders board with move list
+                # re-renders board with move list
                 board.render(turn, moves=move_list, attacks=attack_list)
 
                 print('Enter where you want {} to move:'.format(Piece))
@@ -93,15 +92,15 @@ class Game:
         pos_num = int(pos[1])
         return piece_coord, (pos_let, 8 - pos_num)
 
-    def engine():
+    def engine(self):
         turn = 1
-        Chessboard = Board()
-        Chessboard.render(turn)
-        Game.intro()
+        chessboard = Board()
+        chessboard.render(turn)
+        self.intro()
         while True:
-            ((x1, y1), (x2, y2)) = Game.input(Chessboard, turn)
-            Chessboard.piece_replace(x2, y2, x1, y1)
-            Chessboard.render(turn)
+            ((x1, y1), (x2, y2)) = self.input(chessboard, turn)
+            chessboard.piece_replace(x2, y2, x1, y1)
+            chessboard.render(turn)
             turn = -turn + 1
 
 

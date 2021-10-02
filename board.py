@@ -5,7 +5,8 @@ from os import system, name
 
 class Board:
 
-    def clear(self):
+    @staticmethod
+    def clear():
 
         if name == 'nt':
             _ = system('cls')
@@ -29,7 +30,8 @@ class Board:
             attacks = kwargs["attacks"]
         # clears console
         self.clear()
-        #prints title for chessboard
+
+        # prints title for chessboard
         print(
             Colors.bg.black,
             "                                 Chess                                  ",
@@ -45,11 +47,9 @@ class Board:
             row_str_text = f' {8 - row}  '
             # iterates through each piece in the row
             for piece in range(8):
-                if self.board[row][piece].side == 0 and self.board[row][
-                        piece].piece_type != None:
+                if self.board[row][piece].side == 0:
                     text_color = Colors.fg.Dark_Ch
-                elif self.board[row][piece].side == 1 and self.board[row][
-                        piece].piece_type != None:
+                elif self.board[row][piece].side == 1:
                     text_color = Colors.fg.Light_Ch
                 # calculates background color
                 if moves and (row, piece) in moves:
@@ -89,6 +89,7 @@ class Board:
         return exists
 
     # swaps two pieces in the matrix
+    @staticmethod
     def piece_swap(piece1, piece2):
         piece1.text, piece2.text = piece2.text, piece1.text
         piece1.piece_type, piece2.piece_type = piece2.piece_type, piece1.piece_type
@@ -113,7 +114,7 @@ class Board:
     def valid_piece_check(self, y, x, color, moves, attacks):
         if self.board[y][x].side == color:
             return True
-        elif self.board[y][x].piece_type == None:
+        elif self.board[y][x].piece_type is None:
             moves.append((y, x))
         elif self.board[y][x].side != color and self.board[y][
                 x].piece_type != "K":
@@ -128,19 +129,19 @@ class Board:
         # creates list for pawn pieces
         if piece.piece_type == 'P':
             # finds direction of travel based on piece side
-            dir = -2 * piece.side + 1
+            direction = -2 * piece.side + 1
             # calls valid piece check function
-            self.valid_piece_check(y_coord + dir, x_coord, piece.side, moves,
+            self.valid_piece_check(y_coord + direction, x_coord, piece.side, moves,
                                    attacks)
             # lets piece move two spaces if it hasn't moved before
             if not piece.moved:
-                self.valid_piece_check(y_coord + 2 * dir, x_coord, piece.side,
+                self.valid_piece_check(y_coord + 2 * direction, x_coord, piece.side,
                                        moves, attacks)
             # checks for diagonal attacks
-            if x_coord - 1 >= 0 and self.board[y_coord + dir][x_coord - 1].piece_type:
-              attacks.append((y_coord + dir, x_coord - 1))
-            if x_coord + 1 <= 7 and self.board[y_coord + dir][x_coord + 1].piece_type:
-              attacks.append((y_coord + dir, x_coord - 1))
+            if x_coord - 1 >= 0 and self.board[y_coord + direction][x_coord - 1].piece_type:
+                attacks.append((y_coord + direction, x_coord - 1))
+            if x_coord + 1 <= 7 and self.board[y_coord + direction][x_coord + 1].piece_type:
+                attacks.append((y_coord + direction, x_coord - 1))
         # creates list for rook pieces
         elif piece.piece_type == "R":
 
